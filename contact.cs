@@ -1,90 +1,55 @@
-// ============================================================
-// Name:    Kwadwo Owusu
-// Date:    18/04/2026
-// Course:  SDC320K — Week 2 Project
-// Purpose: Base class for all contact types. Demonstrates 
-//          Inheritance and Interface implementation.
-// ============================================================
+// ================================
+// Name: Kwadwo Owusu
+// Date: 23/04/2026
+// Assignment: SDC320 - Week 3 Project - Abstraction, Constructors & Access Specifiers
+// Description: Abstract base class for all contact types.
+//              Defines shared properties and enforces abstract methods
+//              that all derived classes must implement.
+// ================================
 
 using System;
 
-namespace RolodexApp
+// ABSTRACTION: Contact is abstract - cannot be instantiated directly.
+// Forces all derived classes to provide their own DisplayContact() and ShowSummary().
+public abstract class Contact
 {
-    // DEMONSTRATION OF INTERFACE: 
-    // This defines a "contract" that all contacts must follow.
-    interface IDisplayable
+    // ACCESS SPECIFIERS: Private backing fields - only accessible within this class
+    private string firstName;
+    private string lastName;
+    private string phone;
+    private string email;
+
+    // Public properties - expose data in a controlled way
+    public string FirstName { get => firstName; set => firstName = value; }
+    public string LastName  { get => lastName;  set => lastName  = value; }
+    public string Phone     { get => phone;     set => phone     = value; }
+    public string Email     { get => email;     set => email     = value; }
+
+    // CONSTRUCTOR 1: Default constructor
+    public Contact()
     {
-        void ShowSummary();
+        firstName = "Unknown";
+        lastName  = "Unknown";
+        phone     = "N/A";
+        email     = "N/A";
     }
 
-    // BASE CLASS — implements the IDisplayable interface
-    class Contact : IDisplayable
+    // CONSTRUCTOR 2: Full constructor
+    public Contact(string firstName, string lastName, string phone, string email)
     {
-        // Properties used across the application
-        public string FirstName { get; set; }
-        public string LastName  { get; set; }
-        public string Phone     { get; set; }
-        public string Email     { get; set; }
-        public string Address   { get; set; }
-
-        // Helper property for search and display logic in Rolodex.cs
-        public string FullName => $"{FirstName} {LastName}";
-
-        // Constructor initializing the fields
-        public Contact(string firstName, string lastName, string phone, string email, string address)
-        {
-            FirstName = firstName;
-            LastName  = lastName;
-            Phone     = phone;
-            Email     = email;
-            Address   = address;
-        }
-
-        // INTERFACE IMPLEMENTATION: Providing a simple summary
-        public void ShowSummary()
-        {
-            Console.WriteLine($"[Summary] {FullName} - {Phone}");
-        }
-
-        // DEMONSTRATION OF POLYMORPHISM: 
-        // Marked as 'virtual' so derived classes can provide unique versions.
-        public virtual void DisplayContact()
-        {
-            Console.WriteLine("-----------------------------");
-            Console.WriteLine($"  Name    : {FullName}");
-            Console.WriteLine($"  Phone   : {Phone}");
-            Console.WriteLine($"  Email   : {Email}");
-            Console.WriteLine($"  Address : {Address}");
-        }
-
-        // FIX FOR CS0115: Providing the virtual method for child classes to override
-        public virtual void UpdateContact()
-        {
-            Console.Write($"  First Name [{FirstName}]: ");
-            string? input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input)) FirstName = input;
-
-            Console.Write($"  Last Name [{LastName}]: ");
-            input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input)) LastName = input;
-
-            Console.Write($"  Phone [{Phone}]: ");
-            input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input)) Phone = input;
-
-            Console.Write($"  Email [{Email}]: ");
-            input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input)) Email = input;
-
-            Console.Write($"  Address [{Address}]: ");
-            input = Console.ReadLine();
-            if (!string.IsNullOrWhiteSpace(input)) Address = input;
-        }
-
-        // Returns the contact type label (also polymorphic)
-        public virtual string GetContactType()
-        {
-            return "General Contact";
-        }
+        this.firstName = firstName;
+        this.lastName  = lastName;
+        this.phone     = phone;
+        this.email     = email;
     }
+
+    // ABSTRACTION: Abstract methods - derived classes MUST implement these
+    public abstract void DisplayContact();
+    public abstract void ShowSummary();
+
+    // Protected helper - only accessible by this class and derived classes
+    protected string GetFullName() => $"{firstName} {lastName}";
+
+    // ToString override for general use
+    public override string ToString() => $"{GetFullName()} | {phone} | {email}";
 }
