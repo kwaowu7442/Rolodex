@@ -1,71 +1,57 @@
 ﻿// ================================
 // Name: Kwadwo Owusu
-// Date: 23/04/2026
-// Assignment: SDC320 - Week 3 Project - Abstraction, Constructors & Access Specifiers
-// Description: Main entry point. Demonstrates abstraction, constructors,
-//              access specifiers, inheritance, and polymorphism using
-//              the Rolodex contact management application.
+// Date: 03/05/2026
+// Assignment: SDC320 - Week 4 Project - Database Interactions
+// Description: Demonstrates CRUD operations with SQLite.
 // ================================
 
 using System;
 
-class Program
+namespace RolodexApp
 {
-    static void Main(string[] args)
+    class Program
     {
-        // Header
-        Console.WriteLine("==========================================");
-        Console.WriteLine("  Kwadwo Owusu - Week 3 Project");
-        Console.WriteLine("  Rolodex - Abstraction, Constructors");
-        Console.WriteLine("  & Access Specifiers Demo");
-        Console.WriteLine("==========================================\n");
+        static void Main(string[] args)
+        {
+            DatabaseManager db = new DatabaseManager();
 
-        // Welcome message
-        Console.WriteLine("Welcome to the Rolodex Application!");
-        Console.WriteLine("This app manages Business, Family, and Friend contacts.");
-        Console.WriteLine("Each contact type has its own display format.\n");
+            // Header[cite: 14]
+            Console.WriteLine("==========================================");
+            Console.WriteLine("  Project Week 4: Database Interactions");
+            Console.WriteLine("  Name: Kwadwo owusu");
+            Console.WriteLine("==========================================\n");
 
-        // Create Rolodex
-        Rolodex rolodex = new Rolodex();
+            // Welcome Message
+            Console.WriteLine("Welcome to the Rolodex SQLite System!");
+            Console.WriteLine("This application manages contacts in a local database.\n");
 
-        // CONSTRUCTORS: Using full constructors with realistic data
-        BusinessContact b1 = new BusinessContact("James", "Carter",
-            "555-1001", "james.carter@techcorp.com", "TechCorp Inc.", "Software Engineer");
+            // 1. CREATE[cite: 9, 11]
+            Console.WriteLine("[Action] CREATE: Adding James Carter and Akosua Owusu...");
+            BusinessContact b1 = new BusinessContact("James", "Carter", "555-1001", "james@tech.com", "TechCorp", "Engineer");
+            FamilyContact f1 = new FamilyContact("Akosua", "Owusu", "555-2001", "akosua@gmail.com", "Sister");
+            
+            db.CreateContact(b1, "Business", b1.Company);
+            db.CreateContact(f1, "Family", f1.Relationship);
 
-        BusinessContact b2 = new BusinessContact("Linda", "Mensah",
-            "555-1002", "linda.mensah@bizgroup.com", "BizGroup Ltd.", "Project Manager");
+            // 2. READ
+            db.ReadAllContacts();
 
-        FamilyContact f1 = new FamilyContact("Akosua", "Owusu",
-            "555-2001", "akosua@gmail.com", "Sister");
+            // 3. UPDATE
+            Console.WriteLine("\n[Action] UPDATE: Changing Phone for Record 1...");
+            db.UpdateContactPhone(1, "555-9999");
+            db.ReadAllContacts();
 
-        FamilyContact f2 = new FamilyContact("Kwame", "Owusu",
-            "555-2002", "kwame@gmail.com", "Father");
+            // 4. DELETE
+            Console.WriteLine("\n[Action] DELETE: Removing Record 2...");
+            db.DeleteContact(2);
+            
+            // Final View
+            Console.WriteLine("\nFinal View:");
+            db.ReadAllContacts();
 
-        FriendContact fr1 = new FriendContact("Derek", "Boateng",
-            "555-3001", "derek.b@gmail.com", "D-Boat");
-
-        FriendContact fr2 = new FriendContact("Ama", "Asante",
-            "555-3002", "ama.asante@gmail.com", "Ama");
-
-        // Add all contacts to Rolodex
-        rolodex.AddContact(b1);
-        rolodex.AddContact(b2);
-        rolodex.AddContact(f1);
-        rolodex.AddContact(f2);
-        rolodex.AddContact(fr1);
-        rolodex.AddContact(fr2);
-
-        // Display full details
-        rolodex.DisplayAll();
-
-        // Display summaries
-        rolodex.DisplaySummaries();
-
-        // Display total count
-        rolodex.PrintContactCount();
-
-        Console.WriteLine("\n==========================================");
-        Console.WriteLine("  End of Rolodex Demo");
-        Console.WriteLine("==========================================");
+            Console.WriteLine("\n==========================================");
+            Console.WriteLine("  Week 4 Submission Complete");
+            Console.WriteLine("==========================================");
+        }
     }
 }
