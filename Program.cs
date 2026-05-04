@@ -1,8 +1,7 @@
 ﻿// ================================
 // Name: Kwadwo Owusu
-// Date: 03/05/2026
-// Assignment: SDC320 - Week 4 Project - Database Interactions
-// Description: Demonstrates CRUD operations with SQLite.
+// Date: 05/05/2026
+// Description: Updated Week 4 Project with Interactive User Menu
 // ================================
 
 using System;
@@ -14,44 +13,67 @@ namespace RolodexApp
         static void Main(string[] args)
         {
             DatabaseManager db = new DatabaseManager();
+            bool running = true;
 
-            // Header[cite: 14]
-            Console.WriteLine("==========================================");
-            Console.WriteLine("  Project Week 4: Database Interactions");
-            Console.WriteLine("  Name: Kwadwo owusu");
-            Console.WriteLine("==========================================\n");
+            while (running)
+            {
+                Console.WriteLine("\n--- Rolodex Database Menu ---");
+                Console.WriteLine("1. Add (Create) Contact");
+                Console.WriteLine("2. View (Read) All Contacts");
+                Console.WriteLine("3. Update Contact Phone");
+                Console.WriteLine("4. Delete Contact");
+                Console.WriteLine("5. Exit");
+                Console.Write("Select an option (1-5): ");
 
-            // Welcome Message
-            Console.WriteLine("Welcome to the Rolodex SQLite System!");
-            Console.WriteLine("This application manages contacts in a local database.\n");
+                string choice = Console.ReadLine() ?? "";
 
-            // 1. CREATE[cite: 9, 11]
-            Console.WriteLine("[Action] CREATE: Adding James Carter and Akosua Owusu...");
-            BusinessContact b1 = new BusinessContact("James", "Carter", "555-1001", "james@tech.com", "TechCorp", "Engineer");
-            FamilyContact f1 = new FamilyContact("Akosua", "Owusu", "555-2001", "akosua@gmail.com", "Sister");
-            
-            db.CreateContact(b1, "Business", b1.Company);
-            db.CreateContact(f1, "Family", f1.Relationship);
+                switch (choice)
+                {
+                    case "1":
+                        // User input for Create
+                        Console.Write("Enter First Name: ");
+                        string fName = Console.ReadLine() ?? "";
+                        Console.Write("Enter Last Name: ");
+                        string lName = Console.ReadLine() ?? "";
+                        Console.Write("Enter Phone: ");
+                        string phone = Console.ReadLine() ?? "";
+                        
+                        // Creating a generic contact to store
+                        BusinessContact newContact = new BusinessContact(fName, lName, phone, "N/A", "N/A", "N/A");
+                        db.CreateContact(newContact, "General", "N/A");
+                        Console.WriteLine("Contact Added!");
+                        break;
 
-            // 2. READ
-            db.ReadAllContacts();
+                    case "2":
+                        // Read from database
+                        db.ReadAllContacts();
+                        break;
 
-            // 3. UPDATE
-            Console.WriteLine("\n[Action] UPDATE: Changing Phone for Record 1...");
-            db.UpdateContactPhone(1, "555-9999");
-            db.ReadAllContacts();
+                    case "3":
+                        // User input for Update
+                        Console.Write("Enter ID to update: ");
+                        int updateId = int.Parse(Console.ReadLine() ?? "0");
+                        Console.Write("Enter new phone number: ");
+                        string newPhone = Console.ReadLine() ?? "";
+                        db.UpdateContactPhone(updateId, newPhone);
+                        break;
 
-            // 4. DELETE
-            Console.WriteLine("\n[Action] DELETE: Removing Record 2...");
-            db.DeleteContact(2);
-            
-            // Final View
-            Console.WriteLine("\nFinal View:");
-            db.ReadAllContacts();
+                    case "4":
+                        // User input for Delete
+                        Console.Write("Enter ID to delete: ");
+                        int deleteId = int.Parse(Console.ReadLine() ?? "0");
+                        db.DeleteContact(deleteId);
+                        break;
 
-            Console.WriteLine("\n==========================================");
-            Console.WriteLine("  Week 4 Submission Complete");
-            Console.WriteLine("==========================================");
+                    case "5":
+                        running = false;
+                        break;
+
+                    default:
+                        Console.WriteLine("Invalid choice, try again.");
+                        break;
+                }
+            }
         }
     }
 }
